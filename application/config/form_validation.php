@@ -14,19 +14,6 @@ $config = [
             ]
         ],
         [
-            'field' => 'telp',
-            'label' => 'Nomor Telepon',
-            'rules' => 'trim|required|min_length[3]|max_length[12]|integer|is_unique[user.telp]',
-            'errors' => [
-                'required' => '%s harus diisi',
-                'min_length' => '%s tidak kurang dari 3 angka',
-                'max_length' => '%s tidak lebih dari 12 angka',
-                'integer' => '%s harus angka',
-                'is_unique' => '%s sudah ada silakan gunakan yang lain'
-            ]
-
-        ],
-        [
             'field' => 'nama',
             'label' => 'Nama',
             'rules' => 'trim|required|min_length[3]',
@@ -37,23 +24,25 @@ $config = [
             ]
         ],
         [
-            'field' => 'nokitas',
-            'label' => 'Nomor Identitas',
-            'rules' => 'trim|required|min_length[3]|max_length[20]|integer|is_unique[user.no_kitas]',
+            'field' => 'kas',
+            'label' => 'Kas',
+            'rules' => 'trim|required|min_length[3]|number',
             'errors' => [
                 'required' => '%s harus diisi',
-                'min_length' => '%s tidak kurang dari 3 angka',
-                'max_length' => '%s tidak lebih dari 20 angka',
-                'is_unique' => '%s sudah ada silakan gunakan yang lain'
+                'min_length' => '%s tidak kurang dari 3 huruf',
+                'number' => '%s harus menggunakan angka',
+                'alpha' => '%s harus menggunakan huruf'
             ]
         ],
         [
-            'field' => 'alamat',
-            'label' => 'Alamat',
-            'rules' => 'trim|required|min_length[10]',
+            'field' => 'kontrakan',
+            'label' => 'kontrakan',
+            'rules' => 'trim|required|min_length[3]|number',
             'errors' => [
                 'required' => '%s harus diisi',
-                'min_length' => '%s tidak lebih dari 10 karakter',
+                'min_length' => '%s tidak kurang dari 3 huruf',
+                'number' => '%s harus menggunakan angka',
+                'alpha' => '%s harus menggunakan huruf'
             ]
         ],
         [
@@ -90,43 +79,47 @@ $config = [
             ]
         ],
         [
-            'field' => 'nokitas',
-            'label' => 'Nomor Identitas',
-            'rules' => 'trim|required|min_length[3]|max_length[20]|integer|is_unique[user.no_kitas]',
+            'field' => 'tkas',
+            'label' => 'Kas',
+            'rules' => 'trim|required|min_length[3]|number',
             'errors' => [
                 'required' => '%s harus diisi',
-                'min_length' => '%s tidak kurang dari 3 angka',
-                'max_length' => '%s tidak lebih dari 20 angka',
-                'is_unique' => '%s sudah ada silakan gunakan yang lain'
+                'min_length' => '%s tidak kurang dari 3 huruf',
+                'number' => '%s harus menggunakan angka',
+                'alpha' => '%s harus menggunakan huruf'
             ]
         ],
         [
-            'field' => 'alamat',
-            'label' => 'Alamat',
-            'rules' => 'trim|required|min_length[10]',
+            'field' => 'kas',
+            'label' => 'Kas',
+            'rules' => 'trim|required|min_length[3]|number',
             'errors' => [
                 'required' => '%s harus diisi',
-                'min_length' => '%s tidak lebih dari 10 karakter',
+                'min_length' => '%s tidak kurang dari 3 huruf',
+                'number' => '%s harus menggunakan angka',
+                'alpha' => '%s harus menggunakan huruf'
             ]
         ],
         [
-            'field' => 'password1',
-            'label' => 'Password',
-            'rules' => 'trim|required|min_length[4]|matches[password2]',
+            'field' => 'tkontrakan',
+            'label' => 'Kontrakan',
+            'rules' => 'trim|required|min_length[3]|number',
             'errors' => [
                 'required' => '%s harus diisi',
-                'min_length' => '%s tidak kurang dari 4 karakter',
-                'matches' => '%s tidak cocok!'
+                'min_length' => '%s tidak kurang dari 3 huruf',
+                'number' => '%s harus menggunakan angka',
+                'alpha' => '%s harus menggunakan huruf'
             ]
         ],
         [
-            'field' => 'password2',
-            'label' => 'Password',
-            'rules' => 'trim|required|min_length[4]|matches[password1]',
+            'field' => 'kontrakan',
+            'label' => 'Kontrakan',
+            'rules' => 'trim|required|min_length[3]|number',
             'errors' => [
                 'required' => '%s harus diisi',
-                'min_length' => '%s tidak kurang dari 4 karakter',
-                'matches' => '%s tidak cocok!'
+                'min_length' => '%s tidak kurang dari 3 huruf',
+                'number' => '%s harus menggunakan angka',
+                'alpha' => '%s harus menggunakan huruf'
             ]
         ]
     ],
@@ -158,6 +151,27 @@ $config = [
                 'required' => '%s harus diisi',
                 'min_length' => '%s tidak kurang dari 3 digit',
                 'max_length' => '%s tidak lebih dari 10 digit',
+                'integer' => '%s harus angka'
+            ]
+        ]
+    ],
+    'transaksi' => [
+        [
+            'field' => 'nama',
+            'label' => 'Nama Transaksi',
+            'rules' => 'trim|required|min_length[3]',
+            'errors' => [
+                'required' => '%s harus diisi',
+                'min_length' => '%s tidak kurang dari 3 huruf'
+            ]
+        ],
+        [
+            'field' => 'nominal',
+            'label' => 'Nominal',
+            'rules' => 'trim|required|min_length[3]|integer',
+            'errors' => [
+                'required' => '%s harus diisi',
+                'max_length' => '%s tidak kurang dari 3 digit',
                 'integer' => '%s harus angka'
             ]
         ]

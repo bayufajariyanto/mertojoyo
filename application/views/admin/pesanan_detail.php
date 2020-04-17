@@ -21,7 +21,7 @@
                 <?php
 
                 ?>
-                <form method="post" action="<?= base_url('admin/konfirmasi_pesanan'); ?>">
+                <form method="post" action="<?= base_url('admin/pesanan_konfirmasi'); ?>">
                     <div class="modal-body">
                         <p>Apakah member sudah membayar lunas?</p>
                     </div>
@@ -59,7 +59,7 @@
             </div>
         </div>
     </div>
-    <div class="card w-75">
+    <div class="card">
         <div class="card-body">
             <br>
             <div class="row">
@@ -94,10 +94,12 @@
                     <p class="card-text"><small class="text-muted">Rp. <?= $pesanan['total'] ?> <strong>(<?= $lunas ?>)</strong></small></p>
                 </div>
             </div>
-
-            <a href="<?= base_url() ?>admin/pesanan" class="btn btn-sm btn-secondary">Kembali</a>
-            <button type="button" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#konfirmasi">Konfirmasi</button>
-            <a href="<?= base_url() ?>admin/pesanan_batal/<?= $pesanan['id'] ?>" class="d-sm-inline-block btn btn-sm btn-danger shadow-sm tombol-batal">Batalkan</a>
+            <br><br>
+            <div class="text-center">
+                <a href="<?= base_url() ?>admin/pesanan" class="btn btn-sm btn-secondary">Kembali</a>
+                <a href="<?= base_url('admin/pesanan_konfirmasi/'.$pesanan['id']) ?>" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm">Konfirmasi</a>
+                <a href="<?= base_url() ?>admin/pesanan_batal/<?= $pesanan['id'] ?>" class="d-sm-inline-block btn btn-sm btn-danger shadow-sm tombol-batal">Batalkan</a>
+            </div>
         </div>
     </div>
 

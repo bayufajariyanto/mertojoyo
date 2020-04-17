@@ -10,7 +10,6 @@ function rupiah($angka)
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1>
-        <a href="<?= base_url('admin/member_password/'.$user['id']) ?>" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm">Edit Password</a>
     </div>
     <!-- Button trigger modal -->
     <?= $this->session->flashdata('message'); ?>
@@ -58,10 +57,9 @@ function rupiah($angka)
                 </div>
             </div>
             <br><br>
-            
             <div class="text-center">
                 <a href="<?= base_url() ?>admin/member" class="btn btn-sm btn-secondary">Kembali</a>
-                <a href="<?= base_url('admin/member_edit/'.$user['id']) ?>" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm">Edit</a>
+                <a href="<?= base_url('admin/member') ?>" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm">Edit</a>
                 <a href="<?= base_url() ?>admin/member" class="d-sm-inline-block btn btn-sm btn-danger shadow-sm tombol-batal">Hapus</a>
             </div>
         </div>

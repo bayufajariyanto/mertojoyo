@@ -1,3 +1,9 @@
+<?php
+function rupiah($angka)
+{
+  return number_format($angka, 0, '.', '.');
+}
+?>
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -25,36 +31,23 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="username">Username</label>
-              <input type="text" class="form-control" name="username" id="username" value="<?= set_value('username'); ?>" placeholder="Username anda...">
+              <input type="text" class="form-control" name="username" id="username" value="<?= set_value('username'); ?>" placeholder="">
               <?= form_error('username', '<small class="text-danger pl-2">', '</small>') ?>
             </div>
             <div class="form-group">
-              <label for="telp">No. Telepon</label>
-              <input type="text" class="form-control" max="12" name="telp" id="telp" value="<?= set_value('telp'); ?>" placeholder="08xxxxxxxxxx">
-              <?= form_error('telp', '<small class="text-danger pl-2">', '</small>') ?>
-            </div>
-            <div class="form-group">
-              <label for="kitas">Kartu Identitas</label>
-              <select class="form-control" id="kitas" name="kitas">
-                <option>KTP</option>
-                <option>KTM</option>
-                <option>SIM</option>
-              </select>
-            </div>
-            <div class="form-group">
               <label for="nama">Nama Lengkap</label>
-              <input type="text" class="form-control" name="nama" id="nama" value="<?= set_value('nama'); ?>" placeholder="Nama lengkap">
+              <input type="text" class="form-control" name="nama" id="nama" value="<?= set_value('nama'); ?>" placeholder="">
               <?= form_error('nama', '<small class="text-danger pl-2">', '</small>') ?>
             </div>
             <div class="form-group">
-              <label for="nokitas">Nomor Identitas</label>
-              <input type="text" class="form-control" name="nokitas" id="nokitas" value="<?= set_value('nokitas'); ?>" placeholder="Nomor identitas">
-              <?= form_error('nokitas', '<small class="text-danger pl-2">', '</small>') ?>
+              <label for="kas">Kas (1 Tahun)</label>
+              <input type="number" class="form-control" name="kas" id="kas" value="<?= set_value('kas'); ?>" placeholder="Harga per orang">
+              <?= form_error('kas', '<small class="text-danger pl-2">', '</small>') ?>
             </div>
             <div class="form-group">
-              <label for="alamat">Alamat Identitas</label>
-              <input type="text" class="form-control" name="alamat" id="alamat" value="<?= set_value('alamat'); ?>" placeholder="Alamat sesuai identitas">
-              <?= form_error('alamat', '<small class="text-danger pl-2">', '</small>') ?>
+              <label for="kontrakan">Kontrakan (1 Tahun)</label>
+              <input type="number" class="form-control" name="kontrakan" id="kontrakan" value="<?= set_value('kontrakan'); ?>" placeholder="Harga per orang">
+              <?= form_error('kontrakan', '<small class="text-danger pl-2">', '</small>') ?>
             </div>
             <div class="form-group">
               <label for="password1">Password</label>
@@ -90,21 +83,17 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th>Username</th>
               <th>Nama</th>
-              <th>No Telp</th>
-              <th>Alamat</th>
-              <th>Tanggal Daftar</th>
+              <th>Bayar Kas</th>
+              <th>Bayar Kontrakan</th>
               <th>Aksi</th>
             </tr>
           </thead>
           <tfoot>
             <tr>
-              <th>Username</th>
               <th>Nama</th>
-              <th>No Telp</th>
-              <th>Alamat</th>
-              <th>Tanggal Daftar</th>
+              <th>Bayar Kas</th>
+              <th>Bayar Kontrakan</th>
               <th>Aksi</th>
             </tr>
           </tfoot>
@@ -113,15 +102,11 @@
             foreach ($member as $m) :
             ?>
               <tr>
-                <td><?= $m['username']; ?></td>
                 <td><?= $m['nama']; ?></td>
-                <td><?= $m['telp']; ?></td>
-                <td><?= $m['alamat']; ?></td>
-                <td><?= date('d F Y', $m['date_created']); ?></td>
+                <td>Rp. <?= rupiah($m['kas']); ?></td>
+                <td>Rp. <?= rupiah($m['kontrakan']); ?></td>
                 <td>
-                  <a href="<?= base_url() ?>admin/member_detail/<?= $m['id'] ?>" class="badge badge-primary badge-sm">Detail</a>
-                  <a href="<?= base_url() ?>admin/member_edit/<?= $m['id'] ?>" class="badge badge-success badge-sm">Edit</a>
-                  <a href="<?= base_url() ?>admin/member_hapus/<?= $m['id'] ?>" class="badge badge-danger badge-sm tombol-hapus">Hapus</a>
+                  <a href="<?= base_url() ?>admin/member_detail/<?= $m['id'] ?>" class="btn-sm badge-primary badge-sm text-decoration-none">Detail</a>
                 </td>
               </tr>
 
@@ -150,10 +135,10 @@
           <span aria-hidden="true">×</span>
         </button>
       </div>
-      <div class="modal-body">Pilih "Hapus" untuk menghapus "<?= $m['nama'] ?>".</div>
+      <div class="modal-body">Pilih "Hapus" untuk menghapus ".</div>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Tutup</button>
-        <a class="btn btn-primary" href="<?= base_url('admin/member_hapus/' . $m['username']); ?>">Hapus</a>
+        <a class="btn btn-primary" href="<?= base_url('admin/member_hapus/'); ?>">Hapus</a>
       </div>
     </div>
   </div>

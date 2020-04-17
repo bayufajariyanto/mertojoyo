@@ -11,12 +11,35 @@ class Admin extends CI_Controller
         } else if ($this->session->userdata('role_id') == null) {
             redirect('auth');
         }
+        $this->load->model('Transaksi_model', 'transaksi');
         date_default_timezone_set('Asia/Jakarta');
     }
 
     public function index()
     {
-        $this->member();
+        $data['title'] = 'Dashboard';
+        $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
+        $data['member'] = $this->db->get_where('user', ['role_id' => 2])->result_array();
+        $data['transaksi'] = $this->db->get('transaksi')->result_array();
+        $data['masuk'] = $this->transaksi->getTransaksiMasuk();
+        $data['keluar'] = $this->transaksi->getTransaksiKeluar();
+        // $data['keluar'] = $this->db->get_where('transaksi', ['arah' => 'Spending'])->result_array();
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar');
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('admin/index');
+        $this->load->view('templates/footer');
+    }
+
+    public function profile()
+    {
+        $data['title'] = 'Profile';
+        $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
+        $this->load->view('templates/header', $data);
+        $this->load->view('member/sidebar');
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('templates/profile', $data);
+        $this->load->view('templates/footer');
     }
 
     public function member()
@@ -27,10 +50,8 @@ class Admin extends CI_Controller
         $username = strtolower($this->input->post('username'));
         $password = $this->input->post('password1');
         $nama = ucwords($this->input->post('nama'));
-        $no_kitas = $this->input->post('nokitas');
-        $jenis_kitas = $this->input->post('kitas');
-        $alamat = ucfirst($this->input->post('alamat'));
-        $telp = $this->input->post('telp');
+        $kontrakan = $this->input->post('kontrakan');
+        $kas = $this->input->post('kas');
 
         if ($this->form_validation->run('member') == false) {
             $this->load->view('templates/header', $data);
@@ -41,20 +62,22 @@ class Admin extends CI_Controller
         } else {
             $data = [
                 'username' => $username,
-                'password' => password_hash($password, PASSWORD_DEFAULT),
                 'nama' => $nama,
-                'no_kitas' => $no_kitas,
-                'jenis_kitas' => $jenis_kitas,
-                'alamat' => $alamat,
-                'telp' => $telp,
-                'date_created' => time(),
+                'password' => password_hash($password, PASSWORD_DEFAULT),
+                'kas' => 0,
+                'full_kas' => $kas,
+                'kontrakan' => 0,
+                'full_kontrakan' => $kontrakan,
+                'tanggal_buat' => time(),
                 'role_id' => 2,
             ];
             $this->db->insert('user', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Member baru berhasil ditambahkan!</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Member 
+            ' . $nama . ' berhasil ditambahkan!</div>');
             redirect('admin/member');
         }
     }
+
 
     public function member_detail($id)
     {
@@ -75,22 +98,16 @@ class Admin extends CI_Controller
         $data['user'] = $this->db->get_where('user', ['id' => $id])->row_array();
 
         $username = strtolower($this->input->post('username'));
-        $password = $this->input->post('password1');
         $nama = ucwords($this->input->post('nama'));
-        $no_kitas = $this->input->post('nokitas');
-        $jenis_kitas = $this->input->post('kitas');
-        $alamat = ucfirst($this->input->post('alamat'));
-        $telp = $this->input->post('telp');
+        $kas = ucwords($this->input->post('kas'));
+        $tkas = ucwords($this->input->post('tkas'));
+        $kontrakan = ucwords($this->input->post('kontrakan'));
+        $tkontrakan = ucwords($this->input->post('tkontrakan'));
 
         if ($username != $data['user']['username']) {
             $unikuser = '|is_unique[user.username]';
         } else {
             $unikuser = '';
-        }
-        if ($telp != $data['user']['telp']) {
-            $uniktelp = 'is_unique[user.telp]';
-        } else {
-            $uniktelp = '';
         }
 
         $this->form_validation->set_rules(
@@ -105,19 +122,7 @@ class Admin extends CI_Controller
                 'alpha_dash' => '%s hanya menggunakan huruf, underscore, atau angka'
             ]
         );
-        $this->form_validation->set_rules(
-            'telp',
-            'Nomor Telepon',
-            'trim|required|min_length[3]|max_length[12]|integer' . $uniktelp,
-            [
-                'required' => '%s harus diisi',
-                'min_length' => '%s tidak kurang dari 3 angka',
-                'max_length' => '%s tidak lebih dari 12 angka',
-                'integer' => '%s harus angka',
-                'is_unique' => '%s sudah ada silakan gunakan yang lain'
-            ]
-        );
-        if ($this->form_validation->run('member_edit') == false) {
+        if ($this->form_validation->run() == false) {
             $this->load->view('templates/header', $data);
             $this->load->view('templates/sidebar');
             $this->load->view('templates/topbar', $data);
@@ -129,230 +134,85 @@ class Admin extends CI_Controller
                 'username' => $username,
                 // 'password' => password_hash($password, PASSWORD_DEFAULT),
                 'nama' => $nama,
-                'no_kitas' => $no_kitas,
-                'jenis_kitas' => $jenis_kitas,
-                'alamat' => $alamat,
-                'telp' => $telp
+                'kas' => $tkas,
+                'full_kas' => $kas,
+                'kontrakan' => $tkontrakan,
+                'full_kontrakan' => $kontrakan
             ];
             $this->db->update('user', $data, ['id' => $id]);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Member
-            ' . $data['user']['username'] . ' berhasil diubah!</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Member ' . $data['user']['username'] . ' berhasil diubah!</div>');
             redirect('admin/member');
         }
     }
 
-    public function member_hapus($id)
+    public function member_password($id)
     {
-        $data['user'] = $this->db->get_where('user', ['id' => $id])->row_array();
-        $this->session->set_flashdata('message', '<div class="alert alert-info" role="alert">Member ' . $data['user']['username'] . ' berhasil dihapus!</div>');
-        $this->db->delete('user', array('id' => $id));
-        redirect('admin/member');
+        $this->session->set_flashdata('message', '<div class="alert alert-info" role="alert">Ganti password kaming sun lur!</div>');
+        redirect('admin/index');
     }
 
-    // Barang
-    public function barang()
+    public function transaksi()
     {
-        $data['title'] = 'Barang';
+        $data['title'] = 'Transaksi';
         $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['barang'] = $this->db->get_where('barang')->result_array();
-
-        $nama = ucwords($this->input->post('nama'));
-        $kategori = $this->input->post('kategori');
-        $stok = $this->input->post('stok');
-        $harga = $this->input->post('harga');
-
-        if ($this->form_validation->run('barang') == false) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/sidebar');
-            $this->load->view('templates/topbar', $data);
-            $this->load->view('admin/barang');
-            $this->load->view('templates/footer');
-        } else {
-            $data = [
-                'nama' => $nama,
-                'kategori' => $kategori,
-                'stok' => $stok,
-                'harga' => $harga
-            ];
-            $this->db->insert('barang', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Barang baru berhasil ditambahkan!</div>');
-            redirect('admin/barang');
-        }
-    }
-
-    public function barang_edit($id)
-    {
-        $data['title'] = 'Edit Barang';
-        $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['barang'] = $this->db->get_where('barang', ['id' => $id])->row_array();
+        $data['transaksi'] = $this->transaksi->getTransaksi();
 
         $nama = $this->input->post('nama');
-        $kategori = $this->input->post('kategori');
-        $stok = $this->input->post('stok');
-        $harga = $this->input->post('harga');
-        if ($this->form_validation->run('barang_edit') == false) {
+        $jenis = $this->input->post('jenis');
+        $nominal = $this->input->post('nominal');
+        if ($this->form_validation->run('transaksi') == false) {
             $this->load->view('templates/header', $data);
             $this->load->view('templates/sidebar');
             $this->load->view('templates/topbar', $data);
-            $this->load->view('admin/barang_edit');
+            $this->load->view('admin/transaksi');
             $this->load->view('templates/footer');
         } else {
             $data = [
                 'nama' => $nama,
-                'kategori' => $kategori,
-                'harga' => $harga,
-                'stok' => $stok
+                'arah' => $jenis,
+                'nominal' => $nominal,
+                'tanggal' => time()
             ];
-            $this->db->update('barang', $data, ['id' => $id]);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Barang ' . $nama . ' berhasil diubah!</div>');
-            redirect('admin/barang');
+            $this->db->insert('transaksi', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Transaksi ' . $nama . ' berhasil ditambahkan!</div>');
+            redirect('admin/transaksi');
         }
     }
 
-    public function barang_hapus($id)
+    public function kas()
     {
-        $data['barang'] = $this->db->get_where('barang', ['id' => $id])->row_array();
-        $this->session->set_flashdata('message', '<div class="alert alert-info" role="alert">Barang ' . $data['barang']['nama'] . ' berhasil dihapus!</div>');
-        $this->db->delete('barang', ['id' => $id]);
-        redirect('admin/barang');
-    }
-
-    public function pesanan()
-    {
-        $data['title'] = 'Pesanan';
+        $data['title'] = 'Kas';
         $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['username'] = $this->db->get_where('user', ['role_id' => 2])->result_array();
-        $data['pesanan'] = $this->db->get('pesanan')->result_array();
+        $data['member'] = $this->db->get_where('user', ['role_id' => 2])->result_array();
 
-        // load model
-        $this->load->model('Pesanan_model', 'barang');
-        $data['barang'] = $this->barang->getBarangStok();
-
-        $username = $this->input->post('username');
-        $id_barang = $this->input->post('barang');
-        $jumlah = $this->input->post('jumlah');
-        $status = $this->input->post('status');
-        $barang = $this->db->get_where('barang', ['id' => $id_barang])->row_array();
-        $harga = $barang['harga'] * $jumlah;
-        // var_dump($total);
-        // if ($this->form_validation->run('pesanan') == false) {
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar');
         $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/pesanan');
-        $this->load->view('templates/footer');
-        // } else {
-        // Pembuatan Kode Transaksi
-        $kategori = strtoupper(substr($barang['kategori'], 0, 3));
-        $tanggal = date('Ymd', time());
-        $angka = 1;
-        if ($angka < 10) {
-            $kode = $kategori . '-' . $tanggal . "000" . $angka;
-        } else if ($angka < 1000) {
-            $kode = $kategori . '-' . $tanggal . "00" . $angka;
-        } else if ($angka < 1000) {
-            $kode = $kategori . '-' . $tanggal . "0" . $angka;
-        } else {
-            $kode = $kategori . '-' . $tanggal . $angka;
-        }
-        foreach ($data['pesanan'] as $p) {
-            $b = 'masuk';
-            if ($kode == $p['kode_transaksi']) {
-                $a = 'benar';
-                $angka++;
-                if ($angka < 10) {
-                    $kode = $kategori . '-' . $tanggal . "000" . $angka;
-                } else if ($angka < 100) {
-                    $kode = $kategori . '-' . $tanggal . "00" . $angka;
-                } else if ($angka < 1000) {
-                    $kode = $kategori . '-' . $tanggal . "0" . $angka;
-                } else {
-                    $kode = $kategori . '-' . $tanggal . $angka;
-                }
-            } else {
-                // $a = 'salah';
-                break;
-            }
-        }
-        // Akhir kode transaksi
-        $total = $barang['harga'];
-        if ($barang['stok'] < $jumlah) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Jumlah melebihi batas, stok hanya ' . $barang['stok'] . ' </div>');
-            redirect('admin/pesanan');
-        } else {
-            $stok = $barang['stok'] - $jumlah;
-            $data = [
-                'stok' => $stok
-            ];
-            $pesanan = [
-                'kode_transaksi' => $kode,
-                'username' => $username,
-                'id_barang' => $id_barang,
-                'tanggal_order' => time(),
-                'tanggal_sewa' => time(),
-                'tanggal_bayar' => time(),
-                'jumlah_barang' => $jumlah,
-                'total' => $harga,
-                'status' => $status,
-            ];
-            // $this->db->update('barang', $data, ['id' => $id_barang]);
-            // $this->db->insert('pesanan', $pesanan);
-        }
-        var_dump($angka);
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Transaksi ' . $kode . ' berhasil ditambahkan!</div>');
-        // redirect('admin/pesanan');
-        // }
-    }
-
-    public function pesanan_batal($id)
-    {
-        
-    }
-
-    public function pesanan_detail($id)
-    {
-        $data['title'] = 'Detail Pesanan';
-        $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['username'] = $this->db->get_where('user', ['role_id' => 2])->row_array();
-        $this->load->model('Pesanan_model', 'barang');
-        $data['pesanan'] = $this->db->get_where('pesanan', ['id' => $id])->row_array();
-        $idBarang = $data['pesanan']['id_barang'];
-        $usernama = $data['pesanan']['username'];
-        $data['barang'] = $this->barang->getBarangById($idBarang);
-        $data['nama'] = $this->db->get_where('user', ['username' => $usernama])->row_array();
-        if ($data['pesanan']['status'] == 1) {
-            $data['lunas'] = 'Lunas';
-        } else {
-            $data['lunas'] = 'Belum Lunas';
-        }
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar');
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/pesanan_detail');
+        $this->load->view('admin/kas');
         $this->load->view('templates/footer');
     }
 
-    public function peminjaman()
+    public function kontrakan()
     {
-        $data['title'] = 'Peminjaman';
+        $data['title'] = 'Kontrakan';
         $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-
+        $data['member'] = $this->db->get_where('user', ['role_id' => 2])->result_array();
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar');
         $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/peminjaman');
+        $this->load->view('admin/kontrakan');
         $this->load->view('templates/footer');
     }
 
-    public function peminjaman_detail()
+    public function jadwal_sholat()
     {
-        $data['title'] = 'Peminjaman';
+        $data['title'] = 'Jadwal Sholat';
         $data['user'] = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-
+        $data['member'] = $this->db->get_where('user', ['role_id' => 2])->result_array();
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar');
         $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/peminjaman_detail');
+        $this->load->view('admin/jadwal_sholat');
         $this->load->view('templates/footer');
     }
 }

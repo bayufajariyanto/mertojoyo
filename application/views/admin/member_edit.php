@@ -12,7 +12,7 @@
   <!-- Button trigger modal -->
   <?= $this->session->flashdata('message'); ?>
 
-  <div class="card w-75">
+  <div class="card w-100">
     <div class="card-body">
       <h5 class="card-title">Data Member</h5>
       <form method="post">
@@ -23,32 +23,7 @@
             <?= form_error('username', '<small class="text-danger pl-2">', '</small>') ?>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="telp" class="col-sm-2 col-form-label">No. Telepon</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="telp" name="telp" value="<?= $user['telp'] ?>">
-            <?= form_error('telp', '<small class="text-danger pl-2">', '</small>') ?>
-          </div>
-        </div>
 
-        <div class="form-group row">
-          <label for="kitas" class="col-sm-2 col-form-label">Kartu Identitas</label>
-          <div class="col-sm-10">
-            <select class="form-control" id="kitas" name="kitas">
-              <option value="<?= $user['jenis_kitas'] ?>"><?= $user['jenis_kitas'] ?></option>
-              <?php
-              $array = ['KTP', 'KTM', 'SIM'];
-              foreach ($array as $a) {
-                if ($a != $user['jenis_kitas']) {
-                  echo '<option value="' . $a . '">' . $a . '</option>';
-                }
-                // var_dump($a);
-              }
-              ?>
-            </select>
-            <?= form_error('kitas', '<small class="text-danger pl-2">', '</small>') ?>
-          </div>
-        </div>
         <div class="form-group row">
           <label for="nama" class="col-sm-2 col-form-label">Nama Lengkap</label>
           <div class="col-sm-10">
@@ -56,18 +31,36 @@
             <?= form_error('nama', '<small class="text-danger pl-2">', '</small>') ?>
           </div>
         </div>
+
         <div class="form-group row">
-          <label for="nokitas" class="col-sm-2 col-form-label">Nomor Identitas</label>
+          <label for="tkas" class="col-sm-2 col-form-label">Kas terbayar</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="nokitas" name="nokitas" value="<?= $user['no_kitas'] ?>">
-            <?= form_error('nokitas', '<small class="text-danger pl-2">', '</small>') ?>
+            <input type="number" class="form-control" id="tkas" name="tkas" value="<?= $user['kas'] ?>">
+            <?= form_error('tkas', '<small class="text-danger pl-2">', '</small>') ?>
           </div>
         </div>
+
         <div class="form-group row">
-          <label for="alamat" class="col-sm-2 col-form-label">Alamat Identitas</label>
+          <label for="kas" class="col-sm-2 col-form-label">Kas (Batas Akhir)</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="alamat" name="alamat" value="<?= $user['alamat'] ?>">
-            <?= form_error('alamat', '<small class="text-danger pl-2">', '</small>') ?>
+            <input type="number" class="form-control" id="kas" name="kas" value="<?= $user['full_kas'] ?>">
+            <?= form_error('kas', '<small class="text-danger pl-2">', '</small>') ?>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="tkontrakan" class="col-sm-2 col-form-label">Kontrakan terbayar</label>
+          <div class="col-sm-10">
+            <input type="number" class="form-control" id="tkontrakan" name="tkontrakan" value="<?= $user['kontrakan'] ?>">
+            <?= form_error('tkontrakan', '<small class="text-danger pl-2">', '</small>') ?>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="kontrakan" class="col-sm-2 col-form-label">Kontrakan (1 Tahun)</label>
+          <div class="col-sm-10">
+            <input type="number" class="form-control" id="kontrakan" name="kontrakan" value="<?= $user['full_kontrakan'] ?>">
+            <?= form_error('kontrakan', '<small class="text-danger pl-2">', '</small>') ?>
           </div>
         </div>
 
