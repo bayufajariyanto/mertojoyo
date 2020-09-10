@@ -54,7 +54,7 @@ function rupiah($angka)
             <div class="row">
                 <p class="col-sm-2 text-muted">Tanggal Daftar</p>
                 <div class="col-sm-10">
-                    <small class="card-text text-muted">Member sejak <?= date('d F Y, H:i', $user['tanggal_buat']); ?></small>
+                    <small class="card-text text-muted">Member sejak <?= date('d F Y | H:i', $user['tanggal_buat']); ?></small>
                 </div>
             </div>
             <br><br>

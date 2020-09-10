@@ -44,7 +44,7 @@ function rupiah($angka)
   return number_format($angka, 0, '.', '.');
 }
 for ($i = 0; $i < 3; $i++) :
-  $data[$i] = file_get_contents('https://api.banghasan.com/sholat/format/json/jadwal/kota/775/tanggal/' . date("o-m-d", time() + (60 * 60 * 24 * $i)));
+  $data[$i] = file_get_contents('https://api.banghasan.com/sholat/format/json/jadwal/kota/777/tanggal/' . date("o-m-d", time() + (60 * 60 * 24 * $i)));
   $jadwal[$i] = json_decode($data[$i], true);
   $jadwal[$i] = $jadwal[$i]['jadwal']['data'];
   $arr[$i] = date("o-m-d", time() + (60 * 60 * 24 * $i));
@@ -73,7 +73,7 @@ endfor;
       <h6 class="m-0 font-weight-bold text-primary">Data Sholat</h6>
     </div>
     <div class="card-body">
-      <p class="text-muted">3 Hari ke depan area Malang dan sekitarnya</p>
+      <p class="text-muted">3 Hari ke depan area Kota Pasuruan (WIB)</p>
       <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
@@ -114,7 +114,8 @@ endfor;
                 <td scope="row">
                   <?= $no ?>
                 </td>
-                <td><?= $array[$i]; ?>, <?= $arr[$i]; ?></td>
+                <!-- <td><?= $array[$i]; ?>, <?= $arr[$i]; ?></td> -->
+                <td><?= $jadwal[$i]['tanggal']; ?></td>
                 <td><?= $jadwal[$i]['imsak']; ?></td>
                 <td><?= $jadwal[$i]['subuh']; ?></td>
                 <td><?= $jadwal[$i]['terbit']; ?></td>

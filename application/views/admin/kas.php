@@ -101,7 +101,7 @@ function lunas($angka){
             ?>
                 <h4 class="small font-weight-bold"><?= $m['nama'] ?> <span class="float-right"><?= rupiah($m['kas']) ?>/<?= rupiah($m['full_kas']) ?></span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar <?= $bg ?>" role="progressbar" style="width: <?= persen($m['kas'], $m['full_kas']) ?>%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"><?= lunas(ceil(persen($m['kas'], $m['full_kas']))) ?></div>
+                    <div class="progress-bar <?= $bg ?>" role="progressbar" style="width: <?= persen($m['kas'], $m['full_kas']) ?>%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"><?= lunas(floor(persen($m['kas'], $m['full_kas']))) ?></div>
                 </div>
             <?php
             endforeach;

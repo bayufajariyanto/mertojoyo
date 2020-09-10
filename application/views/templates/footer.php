@@ -2,7 +2,7 @@
 <footer class="sticky-footer bg-white">
   <div class="container my-auto">
     <div class="copyright text-center my-auto">
-      <span>Copyright &copy; <a href="https://instagram.com/bayufajariyanto" style="text-decoration: none; color:unset">Float Company</a> <?= date('Y') ?></span>
+      <span>&copy; 2019 - <?= date('Y') ?> <a href="https://instagram.com/bayufajariyanto" style="text-decoration: none; color:unset">Float Company</a> • All rights reserved</span>
     </div>
   </div>
 </footer>

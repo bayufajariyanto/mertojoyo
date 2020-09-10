@@ -21,7 +21,8 @@ function lunas($angka){
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1><small class="text-muted">*mulai <?= date('d F Y', mktime(0, 0, 0, 8, 1, 2019)); ?> sampai <?= date('d F Y', mktime(0, 0, 0, 7, 31, 2020)) ?></small>
+        <!-- <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1><small class="text-muted">*mulai <?= date('d F Y', mktime(0, 0, 0, 8, 1, 2019)); ?> sampai <?= date('d F Y', mktime(0, 0, 0, 6, 30, 2020)) ?></small> -->
+        <h1 class="h3 mb-0 text-gray-800"><?= $title ?></h1><small class="text-muted">*sekarang <?= date('d F Y', time()); ?> | batas <span class="text-danger font-weight-bold"><?= date('d F Y', mktime(0, 0, 0, 6, 30, 2020)) ?></span></small>
 
         <!-- <button type="button" class="mt-2 d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#tambahPesanan"><i class="fas fa-download fa-sm text-white-50"></i> Tambah <?= $title ?></button> -->
     </div>
@@ -102,7 +103,7 @@ function lunas($angka){
             ?>
                 <h4 class="small font-weight-bold"><?= $m['nama'] ?> <span class="float-right"><?= rupiah($m['kontrakan']) ?>/<?= rupiah($m['full_kontrakan']) ?></span></h4>
                 <div class="progress mb-4">
-                    <div class="progress-bar <?= $bg ?>" role="progressbar" style="width: <?= persen($m['kontrakan'], $m['full_kontrakan']) ?>%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"><?= lunas(ceil(persen($m['kontrakan'], $m['full_kontrakan']))) ?></div>
+                    <div class="progress-bar <?= $bg ?>" role="progressbar" style="width: <?= persen($m['kontrakan'], $m['full_kontrakan']) ?>%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"><?= lunas(floor(persen($m['kontrakan'], $m['full_kontrakan']))) ?></div>
                 </div>
             <?php
             endforeach;

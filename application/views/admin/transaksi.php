@@ -93,8 +93,8 @@ function rupiah($angka)
             <?php $no = 0;
             foreach ($transaksi as $t) :
               if ($t['arah'] == 'Spending') {
-                $bg = 'table-warning';
-                $txt = 'text-primary';
+                 $bg = 'table-warning';
+                $txt = '';
               } else {
                 $txt = 'text-success';
                 $bg = 'table-info';
@@ -104,7 +104,7 @@ function rupiah($angka)
               <tr>
                 <td><?= $no ?></td>
                 <td><?= $t['nama'] ?></td>
-                <td><?= date('d F Y, H:i', time()) ?></td>
+                <td><?= date('d F Y | H:i', $t['tanggal']) ?></td>
                 <td class="<?= $txt ?>">Rp. <?= rupiah($t['nominal']) ?></td>
               </tr>
             <?php endforeach; ?>

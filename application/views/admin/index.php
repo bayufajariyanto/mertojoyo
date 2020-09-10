@@ -11,6 +11,15 @@ function total_kas($transaksi)
   endforeach;
   return $hasil;
 }
+
+function member_kas($member){
+  $hasil = null;
+  foreach($member as $m) :
+    $hasil = $hasil + $m['kas'];
+  endforeach;
+  return $hasil;
+}
+
 function full_kas($member){
   $hasil = null;
   foreach($member as $t):
@@ -55,7 +64,7 @@ function full_kontrakan($member){
 }
 function persen($awal, $akhir)
 {
-    return ceil(($awal * 100) / $akhir);
+    return floor(($awal * 100) / $akhir);
 }
 function rupiah($angka)
 {
@@ -163,9 +172,9 @@ function rupiah($angka)
       <h6 class="m-0 font-weight-bold text-primary">Progress</h6>
     </div>
     <div class="card-body">
-      <h4 class="small font-weight-bold">Kas <span class="float-right"><?= persen(pemasukan($transaksi),full_kas($member)) ?>%</span></h4>
+      <h4 class="small font-weight-bold">Kas <span class="float-right"><?= persen(member_kas($member),full_kas($member)) ?>%</span></h4>
       <div class="progress mb-4">
-        <div class="progress-bar bg-info" role="progressbar" style="width: <?= persen(pemasukan($transaksi),full_kas($member)) ?>%" aria-valuenow="<?= persen(pemasukan($transaksi),full_kas($member)) ?>" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar bg-info" role="progressbar" style="width: <?= persen(member_kas($member),full_kas($member)) ?>%" aria-valuenow="<?= persen(member_kas($member),full_kas($member)) ?>" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
       <h4 class="small font-weight-bold">Kontrakan <span class="float-right"><?= persen(total_kontrakan($member),full_kontrakan($member)) ?>%</span></h4>
       <div class="progress mb-4">
